@@ -156,6 +156,8 @@ architecture rtl of top is
   signal dir_blue            : std_logic_vector(7 downto 0);
   signal dir_pixel_column    : std_logic_vector(10 downto 0);
   signal dir_pixel_row       : std_logic_vector(10 downto 0);
+  
+  signal cnt : std_logic_vector(11 downto 0);
 
 begin
 
@@ -168,8 +170,8 @@ begin
   graphics_lenght <= conv_std_logic_vector(MEM_SIZE*8*8, GRAPH_MEM_ADDR_WIDTH);
   
   -- removed to inputs pin
-  direct_mode <= '1';
-  display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  direct_mode <= '0';
+  display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '1';
@@ -287,10 +289,50 @@ begin
   --char_value
   --char_we
   
+			--char_value <= "000010";
+			--char_address <= conv_std_logic_vector(0, char_address'length);
+			char_we <= '1';
+
+  
+			process (pix_clock_s, vga_rst_n_s) begin
+				if (vga_rst_n_s = '1') then
+					char_address <= (others => '0');
+				elsif (pix_clock_s'event and pix_clock_s = '1') then
+					if (char_address = 5200-1) then
+						char_address <= (others => '0');
+					else
+						char_address <= char_address + 1;
+					end if;
+				end if;
+			end process;
+			
+			
+			--char_address <= conv_std_logic_vector(cnt, char_address'length);
+			process (char_address) begin
+
+					if (char_address = 0)then
+						char_value <= "000001";
+					elsif (char_address = 1) then
+						char_value <= "000010";
+					else
+						char_value <= "100000";
+					end if;
+						
+ 
+			end process;
+
+
+
+			
+			
+			
+  
   -- koristeci signale realizovati logiku koja pise po GRAPH_MEM
   --pixel_address
   --pixel_value
   --pixel_we
+  
+			
   
 		
   
