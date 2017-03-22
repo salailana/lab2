@@ -394,111 +394,108 @@ begin
 				end if;
 			end process;
 	
-	--11111111000000000000000000000000
+
 	
 			
 			process(pixel_address)begin
 	if(pixel_address = 5029)then
-		pixel_value <= (others => '1'); --1
+		pixel_value <= (others => '1'); 
 	
 	elsif(pixel_address = 5049)then 
-		pixel_value <= (others => '1'); --2
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5069)then
-		pixel_value <= (others => '1'); --3
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5089)then
-		pixel_value <= (others => '1'); --4
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5109)then
-		pixel_value <= (others => '1'); --5
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5129)then
-		pixel_value <= (others => '1'); --6
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5149)then 
-		pixel_value <= (others => '1'); --7
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5169)then
-		pixel_value <= (others => '1'); --8
+		pixel_value <= (others => '1'); 
 	
 	elsif(pixel_address = 5189)then
-		pixel_value <= (others => '1'); --9 
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5209)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5229)then
-		pixel_value <= (others => '1'); --20
-		
-	
-	
+		pixel_value <= (others => '1');
 	
 	elsif(pixel_address = 5249)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5269)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5289)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5309)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5329)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5349)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5369)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5389)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5409)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5429)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5449)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5469)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5489)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1');
 		
 	elsif(pixel_address = 5509)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5529)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1');
 		
 	elsif(pixel_address = 5549)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5569)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5589)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5609)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5629)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 		
 	elsif(pixel_address = 5649)then
-		pixel_value <= (others => '1'); --10
+		pixel_value <= (others => '1'); 
 	
 	else 
-		pixel_value <= "00000000000000000000000000000000";
+		pixel_value <= (others => '0');
 		
 	end if;
   end process;
