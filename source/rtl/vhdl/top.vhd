@@ -157,7 +157,14 @@ architecture rtl of top is
   signal dir_pixel_column    : std_logic_vector(10 downto 0);
   signal dir_pixel_row       : std_logic_vector(10 downto 0);
   
-  signal cnt : std_logic_vector(11 downto 0);
+  
+  
+  
+ 
+  signal brojac              : std_logic_vector(31 downto 0);
+  signal address_1        : std_logic_vector(MEM_ADDR_WIDTH-1 downto 0);
+  signal address_2        : std_logic_vector(MEM_ADDR_WIDTH-1 downto 0);
+
 
 begin
 
@@ -171,7 +178,7 @@ begin
   
   -- removed to inputs pin
   direct_mode <= '0';
-  display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '1';
@@ -289,38 +296,74 @@ begin
   --char_value
   --char_we
   
-			--char_value <= "000010";
-			--char_address <= conv_std_logic_vector(0, char_address'length);
+			
 			char_we <= '1';
 
   
 			process (pix_clock_s, vga_rst_n_s) begin
-				if (vga_rst_n_s = '1') then
+			
+				if (vga_rst_n_s = '0') then
 					char_address <= (others => '0');
-				elsif (pix_clock_s'event and pix_clock_s = '1') then
-					if (char_address = 5200-1) then
+					
+				elsif (rising_edge(pix_clock_s)) then
+					if (char_address = 1199) then
 						char_address <= (others => '0');
+						
 					else
 						char_address <= char_address + 1;
+						
 					end if;
 				end if;
 			end process;
 			
 			
-			--char_address <= conv_std_logic_vector(cnt, char_address'length);
+			
 			process (char_address) begin
 
-					if (char_address = 0)then
+					if (char_address = address_1)then
 						char_value <= "000001";
-					elsif (char_address = 1) then
+					elsif (char_address = address_2) then
 						char_value <= "000010";
 					else
 						char_value <= "100000";
 					end if;
 						
- 
 			end process;
-
+			
+			
+			process (pix_clock_s, vga_rst_n_s) begin
+			
+				if (vga_rst_n_s = '0') then
+					brojac <= (others => '0');
+					
+					address_1 <= conv_std_logic_vector(0, address_1'length);
+					address_2 <= conv_std_logic_vector(1, address_2'length);
+					
+				elsif (rising_edge(pix_clock_s)) then
+					if (brojac = 2500000) then
+						brojac <= (others => '0');
+						
+						
+						if(address_1 = 39 ) then
+							address_1 <= (others => '0');
+						else 
+							address_1 <= address_1 + 1;
+						end if;
+					
+						if(address_2 = 39 ) then
+							address_2 <= (others => '0');
+						else 
+							address_2 <= address_2 + 1;
+						end if;
+						
+					else
+						brojac <= brojac + 1;
+						
+					end if;
+				end if;
+			end process;
+			
+			
 
 
 			
@@ -331,6 +374,134 @@ begin
   --pixel_address
   --pixel_value
   --pixel_we
+  
+	pixel_we <= '1';
+	
+	
+	process (pix_clock_s, vga_rst_n_s) begin
+			
+				if (vga_rst_n_s = '0') then
+					pixel_address <= (others => '0');
+					
+				elsif (rising_edge(pix_clock_s)) then
+					if (pixel_address = 9599) then
+						pixel_address <= (others => '0');
+						
+					else
+						pixel_address <= pixel_address + 1;
+						
+					end if;
+				end if;
+			end process;
+	
+	--11111111000000000000000000000000
+	
+			
+			process(pixel_address)begin
+	if(pixel_address = 5029)then
+		pixel_value <= (others => '1'); --1
+	
+	elsif(pixel_address = 5049)then 
+		pixel_value <= (others => '1'); --2
+		
+	elsif(pixel_address = 5069)then
+		pixel_value <= (others => '1'); --3
+		
+	elsif(pixel_address = 5089)then
+		pixel_value <= (others => '1'); --4
+		
+	elsif(pixel_address = 5109)then
+		pixel_value <= (others => '1'); --5
+		
+	elsif(pixel_address = 5129)then
+		pixel_value <= (others => '1'); --6
+		
+	elsif(pixel_address = 5149)then 
+		pixel_value <= (others => '1'); --7
+		
+	elsif(pixel_address = 5169)then
+		pixel_value <= (others => '1'); --8
+	
+	elsif(pixel_address = 5189)then
+		pixel_value <= (others => '1'); --9 
+		
+	elsif(pixel_address = 5209)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5229)then
+		pixel_value <= (others => '1'); --20
+		
+	
+	
+	
+	elsif(pixel_address = 5249)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5269)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5289)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5309)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5329)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5349)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5369)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5389)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5409)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5429)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5449)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5469)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5489)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5509)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5529)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5549)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5569)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5589)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5609)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5629)then
+		pixel_value <= (others => '1'); --10
+		
+	elsif(pixel_address = 5649)then
+		pixel_value <= (others => '1'); --10
+	
+	else 
+		pixel_value <= "00000000000000000000000000000000";
+		
+	end if;
+  end process;
   
 			
   
