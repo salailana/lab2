@@ -23,6 +23,8 @@ entity top is
   port (
     clk_i          : in  std_logic;
     reset_n_i      : in  std_logic;
+		direct_mode_i  : in std_logic;
+		display_mode_i : in std_logic_vector(1 downto 0);
     -- vga
     vga_hsync_o    : out std_logic;
     vga_vsync_o    : out std_logic;
@@ -164,6 +166,11 @@ architecture rtl of top is
   signal brojac              : std_logic_vector(31 downto 0);
   signal address_1        : std_logic_vector(MEM_ADDR_WIDTH-1 downto 0);
   signal address_2        : std_logic_vector(MEM_ADDR_WIDTH-1 downto 0);
+  signal tmp				  : std_logic_vector(GRAPH_MEM_ADDR_WIDTH-1 downto 0);
+  signal brojac2				  : std_logic_vector(31 downto 0);
+
+
+  
 
 
 begin
@@ -177,8 +184,8 @@ begin
   graphics_lenght <= conv_std_logic_vector(MEM_SIZE*8*8, GRAPH_MEM_ADDR_WIDTH);
   
   -- removed to inputs pin
-  direct_mode <= '0';
-  display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  --direct_mode <= '0';
+  --display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '1';
@@ -220,14 +227,14 @@ begin
     clk_i              => clk_i,
     reset_n_i          => reset_n_i,
     --
-    direct_mode_i      => direct_mode,
+    direct_mode_i      => direct_mode_i,
     dir_red_i          => dir_red,
     dir_green_i        => dir_green,
     dir_blue_i         => dir_blue,
     dir_pixel_column_o => dir_pixel_column,
     dir_pixel_row_o    => dir_pixel_row,
     -- cfg
-    display_mode_i     => display_mode,  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+    display_mode_i     => display_mode_i,  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
     -- text mode interface
     text_addr_i        => char_address,
     text_data_i        => char_value,
@@ -397,109 +404,144 @@ begin
 
 	
 			
-			process(pixel_address)begin
-	if(pixel_address = 5029)then
-		pixel_value <= (others => '1'); 
+			process(pix_clock_s, vga_rst_n_s)begin
+			
+				if (vga_rst_n_s = '0') then
+				
+					tmp <=  (others => '0');
+					brojac2 <= (others => '0');
+					
+				elsif (rising_edge(pix_clock_s)) then
+					if (brojac2 = 2500000) then
+						brojac2 <= (others => '0');
+						
+						
+						if (tmp = 19) then
+							tmp <= conv_std_logic_vector(0, tmp'length);
+						else 
+							tmp <= tmp +1;
+						end if;
+							
 	
-	elsif(pixel_address = 5049)then 
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5069)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5089)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5109)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5129)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5149)then 
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5169)then
-		pixel_value <= (others => '1'); 
-	
-	elsif(pixel_address = 5189)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5209)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5229)then
-		pixel_value <= (others => '1');
-	
-	elsif(pixel_address = 5249)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5269)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5289)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5309)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5329)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5349)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5369)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5389)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5409)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5429)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5449)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5469)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5489)then
-		pixel_value <= (others => '1');
-		
-	elsif(pixel_address = 5509)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5529)then
-		pixel_value <= (others => '1');
-		
-	elsif(pixel_address = 5549)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5569)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5589)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5609)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5629)then
-		pixel_value <= (others => '1'); 
-		
-	elsif(pixel_address = 5649)then
-		pixel_value <= (others => '1'); 
-	
-	else 
-		pixel_value <= (others => '0');
-		
-	end if;
-  end process;
-  
+					else 
+						brojac2 <= brojac2 +1;
+					end if;
+						
+					
+						
+					
+						
+			---------------------------------------------------------------
+					
+					
+					end if;
+				  end process;
+				  
+				  process(pixel_address, tmp) begin 
+				  
+				  						if(pixel_address = tmp + 5020)then
+							pixel_value <= (others => '1'); 
+						
+						elsif(pixel_address = tmp + 5040)then 
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5060)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5080)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5100)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5120)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5140)then 
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5160)then
+							pixel_value <= (others => '1'); 
+						
+						elsif(pixel_address = tmp + 5180)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5200)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5220)then
+							pixel_value <= (others => '1');
+						
+						elsif(pixel_address = tmp + 5240)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5260)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5280)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5300)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5320)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5340)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5360)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5380)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5400)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5420)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5440)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5460)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5480)then
+							pixel_value <= (others => '1');
+							
+						elsif(pixel_address = tmp + 5500)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5520)then
+							pixel_value <= (others => '1');
+							
+						elsif(pixel_address = tmp + 5540)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5560)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5580)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5600)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5620)then
+							pixel_value <= (others => '1'); 
+							
+						elsif(pixel_address = tmp + 5640)then
+							pixel_value <= (others => '1'); 
+						
+						else 
+							pixel_value <= (others => '0');
+							
+						end if;
+						
+						end process;
+	  
 			
   
 		
